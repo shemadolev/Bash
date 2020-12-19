@@ -48,7 +48,6 @@ do
 					echo "Same: $1/$File == $2/$File"
 				fi
 			else
-				# echo "Different: $1/$File != $2/$File"
 				echo "Different: $1/$File != $2/$File"
 				if (( $fullRes==1 )); then
 					echo "$diffRes"
