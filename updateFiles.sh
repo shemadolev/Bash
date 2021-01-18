@@ -2,7 +2,7 @@
 # Description:	Updates files in destination directory from a src directory, only if modified.
 # Parameters:	1: Source dir path
 #				2: Destination dir path
-# ver 1.2	shemadolev@gmail.com
+# ver 1.3	shemadolev@gmail.com
 
 if [ $# -ne 2 ]; then
 	echo "Expecting 2 arguments as follows: $0 <srcDir> <destDir>"
@@ -33,19 +33,21 @@ else
 				"$0" "$src/$File" "$dest/$File"
 			fi
 		elif [[ -f "$src/$File" ]]; then #if this is a file
+			# modified=`stat -c %y "$src/$File"`
+			modified=$(date -r "$src/$File" $'+%d/%m/%Y %H:%M:%S');
 			if [[ -f "$dest/$File" ]]; then #check if exists in dest
 			# if [ "$src/$File" -nt "$dest/$File" ]; then #check if exists in dest
 				if ! cmp -s "$src/$File" "$dest/$File"; then #if files are different
 				#Check if src is newer from the dest
 					if [ "$src/$File" -nt "$dest/$File" ]; then
-						echo "Updated:	$dest/$File"
+						echo "Updated: $dest/$File $modified"
 					else
-						echo "Restored:	$dest/$File"
+						echo "Restored: $dest/$File $modified"
 					fi
 					cp "$src/$File" "$dest"
 				fi
 			else #file doesn't exist in dest
-				echo "New:		$dest/$File"
+				echo "New: $dest/$File $modified"
 				cp "$src/$File" "$dest"
 			fi
 		fi
